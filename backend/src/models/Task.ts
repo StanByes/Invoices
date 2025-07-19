@@ -1,4 +1,4 @@
-import {DataTypes, Model, Optional, Sequelize} from "sequelize";
+import {CreationOptional, DataTypes, Model, Optional, Sequelize} from "sequelize";
 
 type TaskAttribute = {
     id: number,
@@ -13,7 +13,7 @@ type TaskAttribute = {
 export type TaskCreationAttribute = Optional<TaskAttribute, "id" | "createdAt" | "updatedAt">
 
 export default class Task extends Model<TaskAttribute, TaskCreationAttribute> {
-    declare id: number;
+    declare id: CreationOptional<number>;
     declare name: string;
     declare description: string;
     declare amount: number;

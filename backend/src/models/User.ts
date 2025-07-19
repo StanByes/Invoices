@@ -1,8 +1,10 @@
 import * as bcrypt from "bcrypt";
 import {CreationOptional, DataTypes, Model, Optional, Sequelize} from "sequelize";
+import Client from "./Client";
 
 type UserAttribute = {
     id: number,
+    client?: Client,
     username: string,
     email: string,
     password: string,
@@ -11,10 +13,10 @@ type UserAttribute = {
     updatedAt: Date
 }
 type UserCreationAttribute = Optional<UserAttribute, "id" | "createdAt" | "updatedAt">
-export type UserPayload = Pick<UserAttribute, "id" | "admin">
 
 class User extends Model<UserAttribute, UserCreationAttribute> {
     declare id: CreationOptional<number>;
+    declare client?: Client;
     declare username: string;
     declare email: string;
     declare password: string;
@@ -62,6 +64,15 @@ class User extends Model<UserAttribute, UserCreationAttribute> {
                 const salt = await bcrypt.genSalt(10);
                 user.password = await bcrypt.hash(user.password, salt);
             }
+        });
+    }
+
+    static makeAssociations() {
+        User.hasOne(Client, {
+            foreignKey: "user_id",
+            as: "client",
+            onUpdate: "CASCADE",
+            onDelete: "CASCADE"
         });
     }
 

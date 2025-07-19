@@ -1,9 +1,9 @@
 import Task, {TaskCreationAttribute} from "../../models/Task";
-import BaseController from "../BaseController";
 import {Request, Response} from "express";
 import {BadRequest, NotFound, Conflict, Success} from "../../utils/HTTPResponse";
+import CrudController from "../CrudController";
 
-export default class TaskController extends BaseController {
+export default class TaskController extends CrudController {
     async index(request: Request, response: Response) {
         return response.status(200).json(await Task.findAll());
     }
