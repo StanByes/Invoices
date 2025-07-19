@@ -6,7 +6,8 @@ module.exports = {
       id: {
         type: DataTypes.INTEGER.UNSIGNED,
         autoIncrement: true,
-        primaryKey: true
+        primaryKey: true,
+          allowNull: false
       },
       username: {
         type: new DataTypes.STRING(100),
