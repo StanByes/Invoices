@@ -70,22 +70,22 @@ export default class TaskController extends BaseController {
     }
 
     private parseBody(request: Request, response: Response, forceOptional: boolean): TaskCreationAttribute | undefined {
-        let { name, description, amount, defaultCount, maxCount } = request.body;
+        let { name, description, amount, defaultQuantity, maxQuantity } = request.body;
         if (!this.checkField(name) || !this.checkField(description) || !this.checkField(amount)) {
             response.status(400).json(BadRequest);
             return;
         }
 
         if (forceOptional) {
-            defaultCount ||= 1;
-            maxCount ||= 5;
+            defaultQuantity ||= 1;
+            maxQuantity ||= 5;
         }
 
-        if (maxCount < defaultCount) {
+        if (maxQuantity < defaultQuantity) {
             response.status(400).json(BadRequest);
             return;
         }
 
-        return { name, description, amount, defaultCount, maxCount };
+        return { name, description, amount, defaultQuantity, maxQuantity };
     }
 }

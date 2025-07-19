@@ -6,7 +6,8 @@ module.exports = {
             id: {
                 type: DataTypes.INTEGER.UNSIGNED,
                 autoIncrement: true,
-                primaryKey: true
+                primaryKey: true,
+                allowNull: false
             },
             name: {
                 type: DataTypes.STRING(100),
@@ -21,12 +22,12 @@ module.exports = {
                 type: DataTypes.FLOAT,
                 allowNull: false
             },
-            defaultCount: {
+            defaultQuantity: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 defaultValue: 1
             },
-            maxCount: {
+            maxQuantity: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 defaultValue: 5

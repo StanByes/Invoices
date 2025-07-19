@@ -5,8 +5,8 @@ type TaskAttribute = {
     name: string,
     description: string,
     amount: number,
-    defaultCount: number,
-    maxCount: number,
+    defaultQuantity: number,
+    maxQuantity: number,
     createdAt: Date,
     updatedAt: Date
 }
@@ -17,8 +17,8 @@ export default class Task extends Model<TaskAttribute, TaskCreationAttribute> {
     declare name: string;
     declare description: string;
     declare amount: number;
-    declare defaultCount: number;
-    declare maxCount: number;
+    declare defaultQuantity: number;
+    declare maxQuantity: number;
     declare createdAt: Date;
     declare updatedAt: Date;
 
@@ -27,7 +27,8 @@ export default class Task extends Model<TaskAttribute, TaskCreationAttribute> {
             id: {
                 type: DataTypes.INTEGER.UNSIGNED,
                 autoIncrement: true,
-                primaryKey: true
+                primaryKey: true,
+                allowNull: false
             },
             name: {
                 type: DataTypes.STRING(100),
@@ -42,12 +43,12 @@ export default class Task extends Model<TaskAttribute, TaskCreationAttribute> {
                 type: DataTypes.FLOAT,
                 allowNull: false
             },
-            defaultCount: {
+            defaultQuantity: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 defaultValue: 1
             },
-            maxCount: {
+            maxQuantity: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 defaultValue: 5
