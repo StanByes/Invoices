@@ -10,4 +10,6 @@ router.get("/", (request: Request, response: Response) => controller.index(reque
 router.get("/:id", (request: Request, response: Response) => controller.show(request, response));
 router.post("/", (request: Request, response: Response) => controller.create(request, response));
 router.patch("/:id", (request: Request, response: Response) => controller.update(request, response));
+router.delete("/:id", (request: Request, response: Response) => controller.delete(request, response));
+
 export default router;

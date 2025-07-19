@@ -44,6 +44,15 @@ export default class TaskController extends BaseController {
         return response.status(200).json(task);
     }
 
+    async delete(request: Request, response: Response) {
+        const task = await this.getTask(request, response);
+        if (!task)
+            return;
+
+        await task.destroy();
+        return response.status(200).json(Success);
+    }
+
     private async getTask(request: Request, response: Response): Promise<Task | undefined> {
         const id = request.params.id;
         if (!id) {
