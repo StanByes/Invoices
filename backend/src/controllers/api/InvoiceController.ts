@@ -11,8 +11,8 @@ export default class InvoiceController extends CrudController {
         const user = request.user!;
 
         let options: FindOptions<InvoiceAttribute> = {};
-        if (!request.user!.admin)
-            options.where = {clientId: user.id};
+        if (!user.admin)
+            options.where = {clientId: user.client!.id};
 
         return response.status(200).json(await Invoice.findAll(options));
     }
@@ -79,9 +79,11 @@ export default class InvoiceController extends CrudController {
         }
 
         const user = request.user!;
-        if (allowNonAdmin && !user.admin && user.client!.id != invoice.clientId) {
-            response.status(403).json(Forbidden);
-            return;
+        if (!user.admin) {
+            if (allowNonAdmin && user.client!.id != invoice.clientId) {
+                response.status(403).json(Forbidden);
+                return;
+            }
         }
 
         return invoice;

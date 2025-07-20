@@ -74,9 +74,11 @@ export default class ClientController extends CrudController {
         }
 
         const user = request.user!;
-        if (allowNonAdmin && !user.admin && user.id != parseInt(id)) {
-            response.status(403).json(Forbidden);
-            return;
+        if (!user.admin) {
+            if (allowNonAdmin && user.client!.id != parseInt(id)) {
+                response.status(403).json(Forbidden);
+                return;
+            }
         }
 
         const client = await Client.findByPk(id, {
