@@ -1,4 +1,5 @@
 import {DataTypes, Model, Optional, Sequelize} from "sequelize";
+
 import Client from "./Client";
 
 export type InvoiceAttribute = {

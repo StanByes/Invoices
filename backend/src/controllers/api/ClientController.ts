@@ -1,9 +1,10 @@
 import {Request, Response} from "express";
-import Client, {ClientCreationAttribute} from "../../models/Client";
-import {BadRequest, Conflict, Forbidden, NotFound, Success} from "../../utils/HTTPResponse";
-import User from "../../models/User";
-import CrudController from "../CrudController";
-import Invoice from "../../models/Invoice";
+
+import CrudController from "@controllers/CrudController";
+import Client, {ClientCreationAttribute} from "@models/Client";
+import Invoice from "@models/Invoice";
+import User from "@models/User";
+import {BadRequest, Conflict, Forbidden, NotFound, Success} from "@utils/HTTPResponse";
 
 export default class ClientController extends CrudController {
     async index(request: Request, response: Response) {

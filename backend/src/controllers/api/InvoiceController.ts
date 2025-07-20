@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
-import CrudController from "../CrudController";
-import Client from "../../models/Client";
-import {BadRequest, Forbidden, NotFound, Success} from "../../utils/HTTPResponse";
-import Invoice, {InvoiceAttribute, InvoiceCreationAttribute} from "../../models/Invoice";
 import {FindOptions} from "sequelize";
+
+import CrudController from "@controllers/CrudController";
+import Client from "@models/Client";
+import Invoice, {InvoiceAttribute, InvoiceCreationAttribute} from "@models/Invoice";
+import {BadRequest, Forbidden, NotFound, Success} from "@utils/HTTPResponse";
 
 export default class InvoiceController extends CrudController {
     async index(request: Request, response: Response) {

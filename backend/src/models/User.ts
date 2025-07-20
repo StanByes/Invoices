@@ -1,5 +1,6 @@
 import * as bcrypt from "bcrypt";
 import {CreationOptional, DataTypes, Model, Optional, Sequelize} from "sequelize";
+
 import Client from "./Client";
 
 type UserAttribute = {

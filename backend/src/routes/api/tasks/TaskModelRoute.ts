@@ -1,11 +1,9 @@
 import {Request, Response, Router} from "express";
-import TaskController from "../../controllers/api/TaskController";
-import Admin from "../../middlewares/Admin";
+import TaskModelController from "@controllers/api/tasks/TaskModelController";
 
-const controller = new TaskController();
+const controller = new TaskModelController();
+
 const router = Router();
-router.use(Admin);
-
 router.get("/", (request: Request, response: Response)=> controller.index(request, response));
 router.get("/:id", (request: Request, response: Response) => controller.show(request, response));
 router.post("/", (request: Request, response: Response) => controller.create(request, response));

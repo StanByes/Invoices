@@ -1,9 +1,10 @@
-import TaskModel, {TaskModelCreationAttribute} from "../../models/TaskModel";
 import {Request, Response} from "express";
-import {BadRequest, NotFound, Conflict, Success} from "../../utils/HTTPResponse";
-import CrudController from "../CrudController";
 
-export default class TaskController extends CrudController {
+import CrudController from "@controllers/CrudController";
+import TaskModel, {TaskModelCreationAttribute} from "@models/TaskModel";
+import {BadRequest, NotFound, Conflict, Success} from "@utils/HTTPResponse";
+
+export default class TaskModelController extends CrudController {
     async index(request: Request, response: Response) {
         return response.status(200).json(await TaskModel.findAll());
     }

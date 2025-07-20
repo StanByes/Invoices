@@ -1,8 +1,9 @@
-import { Request, Response, NextFunction } from "express";
+import {Request, Response, NextFunction} from "express";
 import jwt from "jsonwebtoken";
+
 import config from "../config";
-import User from "../models/User";
-import Client from "../models/Client";
+import Client from "@models/Client";
+import User from "@models/User";
 
 export default async (request: Request, response: Response, next: NextFunction) => {
   const authorization = request.header("Authorization");

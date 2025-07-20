@@ -1,10 +1,11 @@
 import {Request, Response} from "express";
-import BaseController from "./BaseController";
-import User from "../models/User";
-import {Op} from "sequelize";
 import jwt from "jsonwebtoken";
+import {Op} from "sequelize";
+
 import config from "../config";
-import {NotFound} from "../utils/HTTPResponse";
+import BaseController from "./BaseController";
+import User from "@models/User";
+import {NotFound} from "@utils/HTTPResponse";
 
 export default class UserController extends BaseController {
     async sign(request: Request, response: Response) {

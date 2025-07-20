@@ -1,4 +1,5 @@
 import {CreationOptional, DataTypes, Model, Optional, Sequelize} from "sequelize";
+
 import User from "./User";
 import Invoice from "./Invoice";
 

@@ -1,6 +1,7 @@
 import {Request, Response, Router} from "express";
-import ClientController from "../../controllers/api/ClientController";
-import Admin from "../../middlewares/Admin";
+
+import ClientController from "@controllers/api/ClientController";
+import Admin from "@middlewares/Admin";
 
 const controller = new ClientController();
 const router = Router();

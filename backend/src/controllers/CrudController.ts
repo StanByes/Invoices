@@ -1,4 +1,5 @@
 import {Request, Response} from "express";
+
 import BaseController from "./BaseController";
 
 export default abstract class CrudController extends BaseController {
