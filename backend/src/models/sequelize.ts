@@ -1,7 +1,7 @@
 import {Sequelize} from "sequelize";
 import config from "../config";
 import User from "./User";
-import Task from "./Task";
+import TaskModel from "./TaskModel";
 import Client from "./Client";
 import Invoice from "./Invoice";
 
@@ -26,7 +26,7 @@ const sequelize = new Sequelize(
 
 Client.associate(sequelize);
 Invoice.associate(sequelize);
-Task.associate(sequelize);
+TaskModel.associate(sequelize);
 User.associate(sequelize);
 
 User.makeAssociations();

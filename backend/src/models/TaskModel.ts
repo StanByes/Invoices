@@ -1,6 +1,6 @@
 import {CreationOptional, DataTypes, Model, Optional, Sequelize} from "sequelize";
 
-type TaskAttribute = {
+type TaskModelAttribute = {
     id: number,
     name: string,
     description: string,
@@ -10,9 +10,9 @@ type TaskAttribute = {
     createdAt: Date,
     updatedAt: Date
 }
-export type TaskCreationAttribute = Optional<TaskAttribute, "id" | "createdAt" | "updatedAt">
+export type TaskModelCreationAttribute = Optional<TaskModelAttribute, "id" | "createdAt" | "updatedAt">
 
-export default class Task extends Model<TaskAttribute, TaskCreationAttribute> {
+export default class TaskModel extends Model<TaskModelAttribute, TaskModelCreationAttribute> {
     declare id: CreationOptional<number>;
     declare name: string;
     declare description: string;
@@ -23,7 +23,7 @@ export default class Task extends Model<TaskAttribute, TaskCreationAttribute> {
     declare updatedAt: Date;
 
     static associate(sequelize: Sequelize) {
-        Task.init({
+        TaskModel.init({
             id: {
                 type: DataTypes.INTEGER.UNSIGNED,
                 autoIncrement: true,

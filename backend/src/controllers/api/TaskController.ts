@@ -1,11 +1,11 @@
-import Task, {TaskCreationAttribute} from "../../models/Task";
+import TaskModel, {TaskModelCreationAttribute} from "../../models/TaskModel";
 import {Request, Response} from "express";
 import {BadRequest, NotFound, Conflict, Success} from "../../utils/HTTPResponse";
 import CrudController from "../CrudController";
 
 export default class TaskController extends CrudController {
     async index(request: Request, response: Response) {
-        return response.status(200).json(await Task.findAll());
+        return response.status(200).json(await TaskModel.findAll());
     }
 
     async show(request: Request, response: Response) {
@@ -17,11 +17,11 @@ export default class TaskController extends CrudController {
         if (!body)
             return;
 
-        if ((await Task.findOne({where: {name: body.name}})) != null) {
+        if ((await TaskModel.findOne({where: {name: body.name}})) != null) {
             return response.status(409).json(Conflict);
         }
 
-        const task = await Task.create(body);
+        const task = await TaskModel.create(body);
         return response.status(200).json(task);
     }
 
@@ -35,7 +35,7 @@ export default class TaskController extends CrudController {
             return;
 
         if (task.name != body.name) {
-            if ((await Task.findOne({where: {name: body.name}})) != null) {
+            if ((await TaskModel.findOne({where: {name: body.name}})) != null) {
                 return response.status(409).json(Conflict);
             }
         }
@@ -53,14 +53,14 @@ export default class TaskController extends CrudController {
         return response.status(200).json(Success);
     }
 
-    private async getTask(request: Request, response: Response): Promise<Task | undefined> {
+    private async getTask(request: Request, response: Response): Promise<TaskModel | undefined> {
         const id = request.params.id;
         if (!id) {
             response.status(400).json(BadRequest);
             return;
         }
 
-        const task = await Task.findByPk(id);
+        const task = await TaskModel.findByPk(id);
         if (!task) {
             response.status(404).json(NotFound);
             return;
@@ -69,7 +69,7 @@ export default class TaskController extends CrudController {
         return task;
     }
 
-    private parseBody(request: Request, response: Response, forceOptional: boolean): TaskCreationAttribute | undefined {
+    private parseBody(request: Request, response: Response, forceOptional: boolean): TaskModelCreationAttribute | undefined {
         let { name, description, amount, defaultQuantity, maxQuantity } = request.body;
         if (!this.checkField(name) || !this.checkField(description) || !this.checkField(amount)) {
             response.status(400).json(BadRequest);
