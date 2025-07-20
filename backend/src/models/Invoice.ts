@@ -1,6 +1,6 @@
 import {DataTypes, Model, Optional, Sequelize} from "sequelize";
 
-import Client from "./Client";
+import Client from "@models/Client";
 
 export type InvoiceAttribute = {
     id: number,

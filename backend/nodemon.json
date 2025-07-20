@@ -1,7 +1,7 @@
 {
-    "signal": "SIGTERM",
-    "ext": "ts",
-    "execMap": {
-        "ts": "ts-node"
-    }
+  "signal": "SIGTERM",
+  "ext": "ts",
+  "execMap": {
+    "ts": "ts-node"
+  }
 }

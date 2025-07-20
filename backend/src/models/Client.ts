@@ -1,7 +1,7 @@
 import {CreationOptional, DataTypes, Model, Optional, Sequelize} from "sequelize";
 
-import User from "./User";
-import Invoice from "./Invoice";
+import User from "@models/User";
+import Invoice from "@models/Invoice";
 
 type ClientAttribute = {
     id: number,

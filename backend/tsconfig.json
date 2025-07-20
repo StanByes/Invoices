@@ -12,7 +12,8 @@
       "@routes/*": ["routes/*"],
       "@utils/*": ["utils/*"],
     },
-    "strict": true,"skipLibCheck": true,
+    "strict": true,
+    "skipLibCheck": true,
     "target": "es2016"
   }
 }

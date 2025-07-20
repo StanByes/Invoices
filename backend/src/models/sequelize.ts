@@ -1,10 +1,11 @@
 import {Sequelize} from "sequelize";
 
 import config from "../config";
-import User from "./User";
-import TaskModel from "./TaskModel";
-import Client from "./Client";
-import Invoice from "./Invoice";
+import User from "@models/User";
+import TaskModel from "@models/TaskModel";
+import Client from "@models/Client";
+import Invoice from "@models/Invoice";
+import Task from "@models/Task";
 
 const mysqlCredentials = config.mysql;
 
@@ -27,12 +28,15 @@ const sequelize = new Sequelize(
 
 Client.associate(sequelize);
 Invoice.associate(sequelize);
+Task.associate(sequelize);
 TaskModel.associate(sequelize);
 User.associate(sequelize);
 
-User.makeAssociations();
 Client.makeAssociations();
 Invoice.makeAssociations();
+Task.makeAssociations();
+TaskModel.makeAssociations();
+User.makeAssociations();
 
 (async () => {
   try {
