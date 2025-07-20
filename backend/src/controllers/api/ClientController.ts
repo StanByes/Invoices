@@ -3,6 +3,7 @@ import Client, {ClientCreationAttribute} from "../../models/Client";
 import {BadRequest, Conflict, Forbidden, NotFound, Success} from "../../utils/HTTPResponse";
 import User from "../../models/User";
 import CrudController from "../CrudController";
+import Invoice from "../../models/Invoice";
 
 export default class ClientController extends CrudController {
     async index(request: Request, response: Response) {
@@ -22,11 +23,15 @@ export default class ClientController extends CrudController {
         if (!body)
             return;
 
+        if ((await User.findByPk(body.userId)) == null) {
+            return response.status(400).json(BadRequest);
+        }
+
         if ((await Client.findOne({where: {userId: body.userId}})) != null) {
             return response.status(409).json(Conflict);
         }
 
-        const client = await Client.create(body);
+        const client = await Client.create(body, {include: [{model: User, as: "user"}]});
         return response.status(200).json(client);
     }
 
@@ -52,6 +57,14 @@ export default class ClientController extends CrudController {
         return response.status(200).json(Success);
     }
 
+    async invoices(request: Request, response: Response) {
+        const client = await this.getClient(request, response, true);
+        if (!client)
+            return;
+
+        return response.status(200).json(await Invoice.findAll({where: {clientId: client.id}}));
+    }
+
     private async getClient(request: Request, response: Response, allowNonAdmin: boolean): Promise<Client | undefined> {
         const id = request.params.id;
         if (!id) {
@@ -59,7 +72,7 @@ export default class ClientController extends CrudController {
             return;
         }
 
-        const user = request.user as User;
+        const user = request.user!;
         if (allowNonAdmin && !user.admin && user.id != parseInt(id)) {
             response.status(403).json(Forbidden);
             return;

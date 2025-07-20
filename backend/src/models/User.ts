@@ -51,6 +51,7 @@ class User extends Model<UserAttribute, UserCreationAttribute> {
         }, {
             sequelize,
             timestamps: true,
+            engine: "InnoDB",
             underscored: true
         });
 

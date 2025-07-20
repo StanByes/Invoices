@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import config from "../config";
 import User from "../models/User";
+import Client from "../models/Client";
 
 export default async (request: Request, response: Response, next: NextFunction) => {
   const authorization = request.header("Authorization");
@@ -30,7 +31,9 @@ export default async (request: Request, response: Response, next: NextFunction) 
       });
     }
 
-    const user = await User.findByPk(payload.id);
+    const user = await User.findByPk(payload.id, {
+        include: [{model: Client, as: "client"}]
+    });
     if (!user) {
       return response.status(401).json({
         code: 401,

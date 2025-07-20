@@ -1,5 +1,6 @@
 import {CreationOptional, DataTypes, Model, Optional, Sequelize} from "sequelize";
 import User from "./User";
+import Invoice from "./Invoice";
 
 type ClientAttribute = {
     id: number,
@@ -80,16 +81,24 @@ export default class Client extends Model<ClientAttribute, ClientCreationAttribu
         }, {
             sequelize,
             timestamps: true,
+            engine: "InnoDB",
             underscored: true
         });
     }
 
     static makeAssociations() {
         Client.belongsTo(User, {
-            foreignKey: "user_id",
+            foreignKey: "userId",
             as: "user",
             onUpdate: "CASCADE",
-            onDelete: "CASCADE",
+            onDelete: "CASCADE"
         });
+
+        Client.hasMany(Invoice, {
+            foreignKey: "clientId",
+            as: "invoices",
+            onUpdate: "CASCADE",
+            onDelete: "CASCADE"
+        })
     }
 }

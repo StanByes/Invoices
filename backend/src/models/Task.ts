@@ -58,6 +58,7 @@ export default class Task extends Model<TaskAttribute, TaskCreationAttribute> {
         }, {
             sequelize,
             timestamps: true,
+            engine: "InnoDB",
             underscored: true
         })
     }
