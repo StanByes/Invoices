@@ -1,0 +1,59 @@
+@invoiceId = 1
+
+GET {{baseUrl}}/api/invoices
+Authorization: Bearer {{bearerToken}}
+
+###
+GET {{baseUrl}}/api/invoices/{{invoiceId}}
+Authorization: Bearer {{bearerToken}}
+
+###
+POST {{baseUrl}}/api/invoices
+Authorization: Bearer {{bearerToken}}
+Content-Type: application/json
+
+{
+  "client_id": 0,
+  "total": 100,
+  "payed": false
+}
+
+###
+POST {{baseUrl}}/api/invoices
+Authorization: Bearer {{bearerToken}}
+Content-Type: application/json
+
+{
+  "client_id": 0,
+  "total": 100,
+  "reduction": 50,
+  "reduction_type": "PERCENTAGE",
+  "payed": false
+}
+
+###
+PATCH {{baseUrl}}/api/invoices/{{invoiceId}}
+Authorization: Bearer {{bearerToken}}
+Content-Type: application/json
+
+{
+  "total": 100,
+  "payed": false
+}
+
+###
+PATCH {{baseUrl}}/api/invoices/{{invoiceId}}
+Authorization: Bearer {{bearerToken}}
+Content-Type: application/json
+
+{
+  "total": 100,
+  "reduction": 25,
+  "reduction_type": "PRICE",
+  "payed": true
+}
+
+
+###
+DELETE {{baseUrl}}/api/invoices/{{invoiceId}}
+Authorization: Bearer {{bearerToken}}

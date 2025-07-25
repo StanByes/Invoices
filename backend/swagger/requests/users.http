@@ -1,0 +1,25 @@
+POST {{baseUrl}}/users/sign
+Content-Type: application/json
+
+{
+  "username": "StanByes",
+  "email": "stanbyes@gmail.com",
+  "password": "test"
+}
+
+###
+POST {{baseUrl}}/users/login
+Content-Type: application/json
+
+{
+  "username": "StanByes",
+  "password": "test"
+}
+
+###
+GET {{baseUrl}}/users/refresh_token
+Authorization: Bearer {{bearerToken}}
+
+###
+GET {{baseUrl}}/users/logout
+Authorization: Bearer {{bearerToken}}

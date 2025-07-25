@@ -1,0 +1,45 @@
+@clientId = 1
+
+GET {{baseUrl}}/api/clients
+Authorization: Bearer {{bearerToken}}
+
+###
+GET {{baseUrl}}/api/clients/{{clientId}}
+Authorization: Bearer {{bearerToken}}
+
+###
+POST {{baseUrl}}/api/clients
+Authorization: Bearer {{bearerToken}}
+Content-Type: application/json
+
+{
+  "user_id": 0,
+  "first_name": "",
+  "last_name": "",
+  "company_id": "",
+  "company_name": "",
+  "phone": "",
+  "address": "",
+  "city": "",
+  "zip": 0
+}
+
+###
+PATCH {{baseUrl}}/api/clients/{{clientId}}
+Authorization: Bearer {{bearerToken}}
+Content-Type: application/json
+
+{
+  "first_name": "",
+  "last_name": "",
+  "company_id": "",
+  "company_name": "",
+  "phone": "",
+  "address": "",
+  "city": "",
+  "zip": 0
+}
+
+###
+DELETE {{baseUrl}}/api/clients/{{clientId}}
+Authorization: Bearer {{bearerToken}}

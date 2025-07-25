@@ -1,0 +1,934 @@
+openapi: 3.1.1
+info:
+  title: Invoices API
+  description: Invoices backend API.
+  version: 1.0.0
+  contact:
+    name: StanByes
+    url: https://stanbyes.fr
+    email: gestion@stanbyes.fr
+
+servers:
+  - url: http://localhost:3000
+    description: Development server
+
+paths:
+  /status:
+    get:
+      tags:
+        - Global
+      operationId: getStatus
+      description: Check if API is on
+      responses:
+        "200":
+          description: API is on
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    description: HTTP status code
+                    type: number
+                  message:
+                    description: API return message
+                    type: string
+  /users/sign:
+    post:
+      tags:
+        - User
+      operationId: signUser
+      description: Sign user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "201":
+          $ref: "#/components/responses/UserToken"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /users/login:
+    post:
+      tags:
+        - User
+      operationId: loginUser
+      description: Login user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          $ref: "#/components/responses/UserToken"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /users/logout:
+    get:
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      operationId: logoutUser
+      description: Logout user
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+  /users/refresh_token:
+    get:
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      operationId: refreshToken
+      description: Refresh user token
+      responses:
+        "200":
+          $ref: "#/components/responses/UserToken"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /api/clients:
+    get:
+      tags:
+        - Client
+      security:
+        - BearerAuth: []
+      operationId: getClients
+      description: Get all clients
+      responses:
+        "200":
+          description: All clients
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Client"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    post:
+      tags:
+        - Client
+      security:
+        - BearerAuth: []
+      operationId: createClient
+      description: Create client
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClientCreateAttribute"
+      responses:
+        "200":
+          description: Created client
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Client"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /api/clients/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: number
+        required: true
+        description: Client ID
+    get:
+      tags:
+        - Client
+      security:
+        - BearerAuth: []
+      operationId: getClient
+      description: Get client
+      responses:
+        "200":
+          description: Requested client
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompleteClient"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      tags:
+        - Client
+      security:
+        - BearerAuth: []
+      operationId: updateClient
+      description: Update client
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClientUpdateAttribute"
+      responses:
+        "200":
+          description: Updated client
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Client"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    delete:
+      tags:
+        - Client
+      security:
+        - BearerAuth: []
+      operationId: deleteClient
+      description: Delete client
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /api/clients/{id}/invoices:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: number
+        required: true
+        description: Client ID
+    get:
+      tags:
+        - Client
+      security:
+        - BearerAuth: []
+      operationId: getClientInvoices
+      description: Get client invoices
+      responses:
+        "200":
+          description: Client invoices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Invoice"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /api/invoices:
+    get:
+      tags:
+        - Invoice
+      security:
+        - BearerAuth: []
+      operationId: getInvoices
+      description: Get all invoices
+      responses:
+        "200":
+          description: All invoices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Invoice"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    post:
+      tags:
+        - Invoice
+      security:
+        - BearerAuth: []
+      operationId: createInvoice
+      description: Create invoice
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InvoiceCreateAttribute"
+      responses:
+        "200":
+          description: Created invoice
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /api/invoices/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: number
+        required: true
+        description: Invoice ID
+    get:
+      tags:
+        - Invoice
+      security:
+        - BearerAuth: []
+      operationId: getInvoice
+      description: Get invoice
+      responses:
+        "200":
+          description: Requested invoice
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompleteInvoice"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      tags:
+        - Invoice
+      security:
+        - BearerAuth: []
+      operationId: updateInvoice
+      description: Update invoice
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InvoiceUpdateAttribute"
+      responses:
+        "200":
+          description: Updated task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    delete:
+      tags:
+        - Invoice
+      security:
+        - BearerAuth: []
+      operationId: deleteInvoice
+      description: Delete invoice
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /api/invoices/{invoiceId}/tasks/:
+    parameters:
+      - in: path
+        name: invoiceId
+        schema:
+          type: number
+        required: true
+        description: Invoice ID
+    get:
+      tags:
+        - Task
+      security:
+        - BearerAuth: []
+      operationId: getInvoiceTasks
+      description: Get invoice tasks
+      responses:
+        "200":
+          description: All invoice tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Task"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    post:
+      tags:
+        - Invoice
+      security:
+        - BearerAuth: []
+      operationId: createInvoiceTask
+      description: Create invoice task
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskCreateAttribute"
+      responses:
+        "200":
+          description: Created invoice
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /api/invoices/{invoiceId}/tasks/{id}:
+    parameters:
+      - in: path
+        name: invoiceId
+        schema:
+          type: number
+        required: true
+        description: Invoice ID
+      - in: path
+        name: id
+        schema:
+          type: number
+        required: true
+        description: Task ID
+    get:
+      tags:
+        - Invoice
+      security:
+        - BearerAuth: []
+      operationId: getInvoiceTask
+      description: Get invoice task
+      responses:
+        "200":
+          description: Requested invoice task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompleteTask"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      tags:
+        - Invoice
+      security:
+        - BearerAuth: []
+      operationId: updateInvoiceTask
+      description: Update invoice task
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskUpdateAttribute"
+      responses:
+        "200":
+          description: Updated task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Invoice"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    delete:
+      tags:
+        - Invoice
+      security:
+        - BearerAuth: []
+      operationId: deleteInvoiceTask
+      description: Delete invoice task
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /api/task_models:
+    get:
+      tags:
+        - Task
+      security:
+        - BearerAuth: []
+      operationId: getTasks
+      description: Get all tasks
+      responses:
+        "200":
+          description: All tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TaskModel"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    post:
+      tags:
+        - Task
+      security:
+        - BearerAuth: []
+      operationId: createTask
+      description: Create task
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskModelAttribute"
+      responses:
+        "200":
+          description: Created task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskModel"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /api/task_models/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: number
+        required: true
+        description: Task ID
+    get:
+      tags:
+        - Task
+      security:
+        - BearerAuth: []
+      operationId: getTask
+      description: Get task
+      responses:
+        "200":
+          description: Requested task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskModel"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    patch:
+      tags:
+        - Task
+      security:
+        - BearerAuth: []
+      operationId: updateTask
+      description: Update task
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TaskModelAttribute"
+      responses:
+        "200":
+          description: Updated task
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskModel"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+    delete:
+      tags:
+        - Task
+      security:
+        - BearerAuth: []
+      operationId: deleteTask
+      description: Delete task
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+tags:
+  - name: Global
+    description: All request about API works
+  - name: User
+    description: All request about user/auth
+  - name: Task
+    description: All request about tasks in invoice/estimate
+  - name: Client
+    description: All request about clients
+  - name: Invoice
+    description: All reuest about invoices
+components:
+  responses:
+    NotFound:
+      description: Resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/DefaultResponse"
+    BadRequest:
+      description: Bad request sent by client
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/DefaultResponse"
+    Unauthorized:
+      description: Client was unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/DefaultResponse"
+    Conflict:
+      description: Conflit between resources
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/DefaultResponse"
+    UserToken:
+      description: Authentified user token
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Token"
+    Success:
+      description: Request succeed
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/DefaultResponse"
+  schemas:
+    DefaultResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        message:
+          type: string
+      required:
+        - code
+        - message
+    Token:
+      type: object
+      properties:
+        code:
+          type: number
+          enum: [200, 201]
+        token:
+          type: string
+      required:
+        - code
+        - token
+    TaskModel:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        amount:
+          type: number
+        default_quantity:
+          type: number
+          default: 1
+        max_quantity:
+          type: number
+          default: 5
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - name
+        - description
+        - amount
+        - createdAt
+        - updatedAt
+    TaskModelAttribute:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        amount:
+          type: number
+        default_quantity:
+          type: number
+          default: 1
+        max_quantity:
+          type: number
+          default: 5
+      required:
+        - name
+        - description
+        - amount
+    User:
+      type: object
+      properties:
+        id:
+          type: number
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - username
+        - email
+        - password
+        - createdAt
+        - updatedAt
+    Client:
+      type: object
+      properties:
+        id:
+          type: number
+        user_id:
+          type: number
+        first_name:
+          type: string
+        last_name:
+          type: string
+        company_id:
+          type: string
+        company_name:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        zip:
+          type: number
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - user_id
+        - first_name
+        - last_name
+        - phone
+        - address
+        - city
+        - zip
+        - createdAt
+        - updatedAt
+    CompleteClient:
+      allOf:
+        - $ref: "#/components/schemas/Client"
+        - type : object
+          properties:
+            user:
+              $ref: "#/components/schemas/User"
+          required:
+            - user
+    ClientCreateAttribute:
+      type: object
+      properties:
+        user_id:
+          type: number
+        first_name:
+          type: string
+        last_name:
+          type: string
+        company_id:
+          type: string
+        company_name:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        zip:
+          type: number
+      required:
+        - user_id
+        - first_name
+        - last_name
+        - phone
+        - address
+        - city
+        - zip
+    ClientUpdateAttribute:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        company_id:
+          type: string
+        company_name:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        zip:
+          type: number
+      required:
+        - first_name
+        - last_name
+        - phone
+        - address
+        - city
+        - zip
+    Invoice:
+      type: object
+      properties:
+        id:
+          type: number
+        client_id:
+          type: number
+        total:
+          type: number
+        reduction:
+          type: number
+        reduction_type:
+          type: string
+          enum: ["PERCENTAGE", "PRICE"]
+        payed:
+          type: boolean
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - client_id
+        - total
+        - payed
+        - createdAt
+        - updatedAt
+    CompleteInvoice:
+      allOf:
+        - $ref: "#/components/schemas/Invoice"
+        - type : object
+          properties:
+            client:
+              $ref: "#/components/schemas/Client"
+          required:
+            - client
+    InvoiceCreateAttribute:
+      type: object
+      properties:
+        client_id:
+          type: number
+        reduction:
+          type: number
+        reduction_type:
+          type: string
+          enum: ["PERCENTAGE", "PRICE"]
+        payed:
+          type: boolean
+          default: false
+      required:
+        - client_id
+        - payed
+    InvoiceUpdateAttribute:
+      type: object
+      properties:
+        reduction:
+          type: number
+        reduction_type:
+          type: string
+          enum: ["PERCENTAGE", "PRICE"]
+        payed:
+          type: boolean
+          default: true
+      required:
+        - payed
+    Task:
+      type: object
+      properties:
+        id:
+          type: number
+        model_id:
+          type: number
+        invoice_id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        quantity:
+          type: number
+          default: 1
+        total:
+          type: number
+        reduction:
+          type: number
+        reduction_type:
+          type: string
+          enum: ["PERCENTAGE", "PRICE"]
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+        - id
+        - model_id
+        - invoice_id
+        - name
+        - description
+        - quantity
+        - createdAt
+        - updatedAt
+    CompleteTask:
+      allOf:
+        - $ref: "#/components/schemas/Task"
+        - type : object
+          properties:
+            model:
+              $ref: "#/components/schemas/TaskModel"
+          required:
+            - model
+    TaskCreateAttribute:
+      type: object
+      properties:
+        model_id:
+          type: number
+      required:
+        - model_id
+    TaskUpdateAttribute:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        quantity:
+          type: number
+          default: 1
+        amount:
+          type: number
+        reduction:
+          type: number
+        reduction_type:
+          type: string
+          enum: ["PERCENTAGE", "PRICE"]
+      required:
+        - model_id
+        - invoice_id
+        - name
+        - description
+        - quantity
+        - amount
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
