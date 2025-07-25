@@ -71,22 +71,23 @@ export default class TaskModelController extends CrudController {
     }
 
     private parseBody(request: Request, response: Response, forceOptional: boolean): TaskModelCreationAttribute | undefined {
-        let { name, description, amount, defaultQuantity, maxQuantity } = request.body;
+        let { name, description, amount, default_quantity, max_quantity } = request.body;
         if (!this.checkField(name) || !this.checkField(description) || !this.checkField(amount)) {
             response.status(400).json(BadRequest);
             return;
         }
 
+        // TODO : Validation number
         if (forceOptional) {
-            defaultQuantity ||= 1;
-            maxQuantity ||= 5;
+            default_quantity ||= 1;
+            max_quantity ||= 5;
         }
 
-        if (maxQuantity < defaultQuantity) {
+        if (max_quantity < default_quantity) {
             response.status(400).json(BadRequest);
             return;
         }
 
-        return { name, description, amount, defaultQuantity, maxQuantity };
+        return { name, description, amount, defaultQuantity: default_quantity, maxQuantity: max_quantity };
     }
 }
