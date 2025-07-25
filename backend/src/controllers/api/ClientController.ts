@@ -96,11 +96,11 @@ export default class ClientController extends CrudController {
     }
 
     private parseBody(request: Request, response: Response, update: boolean): ClientCreationAttribute | undefined {
-        const { firstName, lastName, companyId, companyName, phone, address, city, zip } = request.body;
-        const userId = !update ? request.body["userId"] : undefined;
+        const { first_name, last_name, company_id, company_name, phone, address, city, zip } = request.body;
+        const userId = !update ? request.body["user_id"] : undefined;
         if ((!update && !this.checkField(userId))
-            || !this.checkField(firstName)
-            || !this.checkField(lastName)
+            || !this.checkField(first_name)
+            || !this.checkField(last_name)
             || !this.checkField(phone)
             || !this.checkField(address)
             || !this.checkField(city)
@@ -109,6 +109,16 @@ export default class ClientController extends CrudController {
             return;
         }
 
-        return { userId, firstName, lastName, companyId, companyName, phone, address, city, zip };
+        return {
+            userId,
+            firstName: first_name,
+            lastName: last_name,
+            companyId: company_id,
+            companyName: company_name,
+            phone,
+            address,
+            city,
+            zip
+        };
     }
 }
