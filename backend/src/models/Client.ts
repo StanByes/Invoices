@@ -22,7 +22,6 @@ export type ClientCreationAttribute = Optional<ClientAttribute, "id" | "createdA
 export default class Client extends Model<ClientAttribute, ClientCreationAttribute> {
     declare id: CreationOptional<number>;
     declare userId: number;
-    declare user: CreationOptional<User>;
     declare firstName: string;
     declare lastName: string;
     declare companyId?: string;
@@ -33,6 +32,9 @@ export default class Client extends Model<ClientAttribute, ClientCreationAttribu
     declare zip: number;
     declare createdAt: Date;
     declare updatedAt: Date;
+
+    declare user: User;
+    declare invoices: Invoice[];
 
     static associate(sequelize: Sequelize) {
         Client.init({
