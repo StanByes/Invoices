@@ -17,11 +17,12 @@ type UserCreationAttribute = Optional<UserAttribute, "id" | "createdAt" | "updat
 
 class User extends Model<UserAttribute, UserCreationAttribute> {
     declare id: CreationOptional<number>;
-    declare client?: Client;
     declare username: string;
     declare email: string;
     declare password: string;
     declare admin: boolean;
+
+    declare client?: Client;
 
     static associate(sequelize: Sequelize) {
         User.init({
