@@ -1,6 +1,7 @@
 import {DataTypes, Model, Optional, Sequelize} from "sequelize";
 
 import Client from "@models/Client";
+import Task from "@models/Task";
 import {ReductionType} from "@models/Enums";
 
 export type InvoiceAttribute = {
@@ -24,6 +25,9 @@ export default class Invoice extends Model<InvoiceAttribute, InvoiceCreationAttr
     declare payed: boolean;
     declare createdAt: Date;
     declare updatedAt: Date;
+
+    declare client: Client;
+    declare tasks: Task[];
 
     static associate(sequelize: Sequelize) {
         Invoice.init({
@@ -74,6 +78,17 @@ export default class Invoice extends Model<InvoiceAttribute, InvoiceCreationAttr
             as: "client",
             onUpdate: "CASCADE",
             onDelete: "CASCADE"
+        });
+
+        Invoice.hasMany(Task, {
+            foreignKey: "invoiceId",
+            as: "tasks",
+            onUpdate: "CASCADE",
+            onDelete: "CASCADE"
         })
+    }
+
+    static async findByPkWithTasks(primaryKey: number) {
+        return await Invoice.findByPk(primaryKey, {include: [{model: Task, as: "tasks"}]});
     }
 }

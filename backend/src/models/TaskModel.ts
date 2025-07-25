@@ -1,4 +1,5 @@
 import {CreationOptional, DataTypes, Model, Optional, Sequelize} from "sequelize";
+import Task from "@models/Task";
 
 type TaskModelAttribute = {
     id: number,
@@ -21,6 +22,8 @@ export default class TaskModel extends Model<TaskModelAttribute, TaskModelCreati
     declare maxQuantity: number;
     declare createdAt: Date;
     declare updatedAt: Date;
+
+    declare tasks: Task[];
 
     static associate(sequelize: Sequelize) {
         TaskModel.init({
@@ -60,6 +63,15 @@ export default class TaskModel extends Model<TaskModelAttribute, TaskModelCreati
             timestamps: true,
             engine: "InnoDB",
             underscored: true
+        })
+    }
+
+    static makeAssociations() {
+        TaskModel.hasMany(Task, {
+            foreignKey: "modelId",
+            as: "tasks",
+            onUpdate: "CASCADE",
+            onDelete: "CASCADE"
         })
     }
 }
