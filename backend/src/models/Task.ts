@@ -98,7 +98,11 @@ export default class Task extends Model<TaskAttribute, TaskCreationAttribute> {
             timestamps: true,
             engine: "InnoDB",
             underscored: true
-        })
+        });
+
+        Task.afterSave(async (task: Task) => {
+            await task.updateTotal();
+        });
     }
 
     static makeAssociations() {
@@ -118,7 +122,7 @@ export default class Task extends Model<TaskAttribute, TaskCreationAttribute> {
     }
 
     static async createByModel(invoice: Invoice, model: TaskModel): Promise<Task> {
-        const task = await Task.create({
+        return await Task.create({
             modelId: model.id,
             invoiceId: invoice.id,
             name: model.name,
@@ -127,14 +131,6 @@ export default class Task extends Model<TaskAttribute, TaskCreationAttribute> {
             amount: model.amount,
             total: model.amount
         });
-
-        await task.updateTotal();
-        return task;
-    }
-
-    async updateTask(attributes: TaskUpdateAttribute) {
-        await this.update(attributes);
-        await this.updateTotal();
     }
 
     async updateTotal() {

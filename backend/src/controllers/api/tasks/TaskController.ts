@@ -57,7 +57,7 @@ export default class TaskController extends CrudController {
         if (!body)
             return;
 
-        await task.updateTask(body);
+        await task.update(body);
         return response.status(200).json(task);
     }
     async delete(request: Request, response: Response) {
