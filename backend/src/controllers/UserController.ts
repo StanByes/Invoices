@@ -6,6 +6,7 @@ import config from "../config";
 import BaseController from "./BaseController";
 import User from "@models/User";
 import {NotFound} from "@utils/HTTPResponse";
+import Client from "@models/Client";
 
 export default class UserController extends BaseController {
     async sign(request: Request, response: Response) {
@@ -29,7 +30,7 @@ export default class UserController extends BaseController {
             });
         }
 
-        const user = await User.create({username, email, password, admin: false});
+        const user = await User.create({username, email, password, admin: false}, {include: [{model: Client, as: "client"}]});
         const token = this.createToken(user);
 
         return response
@@ -54,7 +55,7 @@ export default class UserController extends BaseController {
             });
         }
 
-        const user = await User.findOne({where: {username}});
+        const user = await User.findOne({where: {username}, include: [{model: Client, as: "client"}]});
         if (!user) {
             return response.status(404).json(NotFound)
         }
@@ -93,7 +94,7 @@ export default class UserController extends BaseController {
             const payload = jwt.verify(refreshToken, config.jwtToken);
             if (!payload || typeof payload === "string") return null;
 
-            const user = await User.findByPk(payload.id);
+            const user = await User.findByPk(payload.id, {include: [{model: Client, as: "client"}]});
             if (!user) {
                 return response.status(401).json({
                     code: 401, message: "Unauthorized"
@@ -115,9 +116,17 @@ export default class UserController extends BaseController {
     }
 
     private createToken(user: User): { accessToken: string, refreshToken: string } {
-        const payload = {
-            id: user.id, admin: user.admin
+        const payload: {
+            id: number,
+            admin: boolean,
+            clientId?: number
+        } = {
+            id: user.id,
+            admin: user.admin
         };
+
+        if (user.client)
+            payload.clientId = user.client.id;
 
         return {
             accessToken: jwt.sign(payload, config.jwtToken, {expiresIn: "30m"}),
