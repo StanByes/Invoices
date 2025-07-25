@@ -1,14 +1,14 @@
 import {Router} from "express";
 
 import Authentication from "@middlewares/Authentication";
-import ClientRoute from "./api/ClientRoute";
-import InvoiceRoute from "./api/InvoiceRoute";
-import TaskRoute from "./api/tasks/TaskRoute";
+import ClientRoute from "@routes/api/ClientRoute";
+import InvoiceRoute from "@routes/api/InvoiceRoute";
+import TaskModelRoute from "@routes/api/tasks/TaskModelRoute";
 
 const router = Router();
 router.use(Authentication);
 
 router.use("/clients", ClientRoute);
 router.use("/invoices", InvoiceRoute);
-router.use("/tasks/models", TaskRoute);
+router.use("/task_models", TaskModelRoute);
 export default router;
