@@ -2,6 +2,7 @@ import {CreationOptional, DataTypes, Model, Optional, Sequelize} from "sequelize
 import Invoice from "@models/Invoice";
 import TaskModel from "@models/TaskModel";
 import {ReductionType} from "@models/Enums";
+import {calculateTotal} from "@utils/Calculator";
 
 type TaskAttribute = {
     id: number,
@@ -100,9 +101,17 @@ export default class Task extends Model<TaskAttribute, TaskCreationAttribute> {
             underscored: true
         });
 
-        Task.afterSave(async (task: Task) => {
+        const handleTaskChange = async (task: Task) => {
             await task.updateTotal();
-        });
+
+            if (!task.invoice)
+                task = await task.reload({include: [{model: Invoice, as: "invoice"}]});
+
+            await task.invoice.updateTotal();
+        }
+
+        Task.afterSave(handleTaskChange);
+        Task.afterDestroy(handleTaskChange);
     }
 
     static makeAssociations() {
@@ -134,17 +143,7 @@ export default class Task extends Model<TaskAttribute, TaskCreationAttribute> {
     }
 
     async updateTotal() {
-        let total = this.amount * this.quantity;
-        if (this.reduction) {
-            if (this.reductionType == "PERCENTAGE") {
-                total *= (1 - (this.reduction / 100));
-            } else {
-                total -= this.reduction;
-            }
-        }
-
-        await this.update({
-            total: total
-        });
+        const total = calculateTotal(this.amount * this.quantity, this.reduction, this.reductionType);
+        await this.update({total}, { hooks: false });
     }
 }

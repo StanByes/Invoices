@@ -3,6 +3,7 @@ import {DataTypes, Model, Optional, Sequelize} from "sequelize";
 import Client from "@models/Client";
 import Task from "@models/Task";
 import {ReductionType} from "@models/Enums";
+import {calculateTotal} from "@utils/Calculator";
 
 export type InvoiceAttribute = {
     id: number,
@@ -70,6 +71,10 @@ export default class Invoice extends Model<InvoiceAttribute, InvoiceCreationAttr
             engine: "InnoDB",
             underscored: true
         });
+
+        Invoice.afterSave(async (invoice: Invoice) => {
+            await invoice.updateTotal();
+        })
     }
 
     static makeAssociations() {
@@ -85,10 +90,30 @@ export default class Invoice extends Model<InvoiceAttribute, InvoiceCreationAttr
             as: "tasks",
             onUpdate: "CASCADE",
             onDelete: "CASCADE"
-        })
+        });
     }
 
     static async findByPkWithTasks(primaryKey: number) {
         return await Invoice.findByPk(primaryKey, {include: [{model: Task, as: "tasks"}]});
+    }
+
+    async updateTotal() {
+        let total = 0;
+
+        if (!this.tasks)
+            await this.reload({include: [{model: Task, as: "tasks"}]});
+
+        if (this.tasks.length != 0) {
+            const taskTotal = this.tasks.reduce((total: number, task: Task) => {
+                if (task.total)
+                    total += task.total;
+
+                return total;
+            }, 0);
+
+            total = calculateTotal(taskTotal, this.reduction, this.reductionType);
+        }
+
+        await this.update({total}, { hooks: false });
     }
 }
