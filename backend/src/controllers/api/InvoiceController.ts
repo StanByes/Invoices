@@ -90,14 +90,17 @@ export default class InvoiceController extends CrudController {
     }
 
     private parseBody(request: Request, response: Response, update: boolean): InvoiceCreationAttribute | undefined {
-        const { total, payed } = request.body;
-        const clientId = !update ? request.body["clientId"] : undefined;
+        const { payed, reduction, reduction_type } = request.body;
 
-        if ((!update && !this.checkField(clientId)) || !this.checkField(total) || !this.checkField(payed)) {
+        const clientId = !update ? request.body["client_id"] : undefined;
+
+        if ((!update && !this.checkField(clientId)) || !this.checkField(payed)) {
             response.status(400).json(BadRequest);
             return;
         }
 
-        return { clientId, total, payed };
+         // TODO : Validation number
+
+        return { clientId, payed, reduction, reductionType: reduction_type };
     }
 }

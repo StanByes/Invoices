@@ -1,11 +1,14 @@
 import {DataTypes, Model, Optional, Sequelize} from "sequelize";
 
 import Client from "@models/Client";
+import {ReductionType} from "@models/Enums";
 
 export type InvoiceAttribute = {
     id: number,
     clientId: number,
-    total: number,
+    total?: number,
+    reduction?: number,
+    reductionType?: ReductionType,
     payed: boolean,
     createdAt: Date,
     updatedAt: Date
@@ -15,7 +18,9 @@ export type InvoiceCreationAttribute = Optional<InvoiceAttribute, "id" | "create
 export default class Invoice extends Model<InvoiceAttribute, InvoiceCreationAttribute> {
     declare id: number;
     declare clientId: number;
-    declare total: number;
+    declare total?: number;
+    declare reduction?: number;
+    declare reductionType?: ReductionType;
     declare payed: boolean;
     declare createdAt: Date;
     declare updatedAt: Date;
@@ -38,7 +43,15 @@ export default class Invoice extends Model<InvoiceAttribute, InvoiceCreationAttr
             },
             total: {
                 type: DataTypes.FLOAT,
-                allowNull: false
+                allowNull: true
+            },
+            reduction: {
+                type: DataTypes.FLOAT,
+                allowNull: true
+            },
+            reductionType: {
+                type: DataTypes.ENUM("PERCENTAGE", "PRICE"),
+                allowNull: true
             },
             payed: {
                 type: DataTypes.BOOLEAN,
