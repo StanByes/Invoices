@@ -1,0 +1,48 @@
+@invoiceId = 2
+@taskId = 1
+
+GET {{baseUrl}}/api/invoices/{{invoiceId}}/tasks
+Authorization: Bearer {{bearerToken}}
+
+###
+GET {{baseUrl}}/api/invoices/{{invoiceId}}/tasks/{{taskId}}
+Authorization: Bearer {{bearerToken}}
+
+###
+POST {{baseUrl}}/api/invoices/{{invoiceId}}/tasks
+Authorization: Bearer {{bearerToken}}
+Content-Type: application/json
+
+{
+  "model_id": 1
+}
+
+###
+PATCH {{baseUrl}}/api/invoices/{{invoiceId}}/tasks/{{taskId}}
+Authorization: Bearer {{bearerToken}}
+Content-Type: application/json
+
+{
+  "name": "Nouveau tâche spécifique",
+  "description": "Je suis une tâche spécifique basée sur un autre model",
+  "quantity": 2,
+  "amount": 100
+}
+
+###
+PATCH {{baseUrl}}/api/invoices/{{invoiceId}}/tasks/{{taskId}}
+Authorization: Bearer {{bearerToken}}
+Content-Type: application/json
+
+{
+  "name": "Nouveau tâche spécifique avec réduc",
+  "description": "Je suis une tâche spécifique basée sur un autre model avec une réduction",
+  "quantity": 2,
+  "amount": 100,
+  "reduction": 37,
+  "reduction_type": "PRICE"
+}
+
+###
+DELETE {{baseUrl}}/api/invoices/{{invoiceId}}/tasks/5
+Authorization: Bearer {{bearerToken}}

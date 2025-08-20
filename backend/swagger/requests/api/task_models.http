@@ -1,0 +1,49 @@
+@taskModelId = 1
+
+GET {{baseUrl}}/api/task_models
+Authorization: Bearer {{bearerToken}}
+
+###
+GET {{baseUrl}}/api/task_models/{{taskModelId}}
+Authorization: Bearer {{bearerToken}}
+
+###
+POST {{baseUrl}}/api/task_models
+Authorization: Bearer {{bearerToken}}
+Content-Type: application/json
+
+{
+  "name": "test model",
+  "description": "Je suis un test de model",
+  "amount": 100
+}
+
+###
+POST {{baseUrl}}/api/task_models
+Authorization: Bearer {{bearerToken}}
+Content-Type: application/json
+
+{
+  "name": "test model",
+  "description": "Je suis un test de model",
+  "amount": 100,
+  "default_quantity": 0,
+  "max_quantity": 0
+}
+
+###
+PATCH {{baseUrl}}/api/task_models/{{taskModelId}}
+Authorization: Bearer {{bearerToken}}
+Content-Type: application/json
+
+{
+  "name": "",
+  "description": "",
+  "amount": 0,
+  "default_quantity": 0,
+  "max_quantity": 0
+}
+
+###
+DELETE {{baseUrl}}/api/task_models/{{taskModelId}}
+Authorization: Bearer {{bearerToken}}
