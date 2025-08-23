@@ -10,15 +10,15 @@ export default async (request: Request, response: Response, next: NextFunction) 
   if (!authorization) {
     return response.status(401).json({
       code: 401,
-      message: "Unauthorized"
+      message: "Access token is missing"
     });
   }
 
   const splitAuth = authorization.split(" ");
   if (splitAuth.length != 2) {
-    return response.status(401).json({
-      code: 401,
-      message: "Unauthorized"
+    return response.status(400).json({
+      code: 400,
+      message: "Invalid Authorization Header"
     });
   }
 
@@ -28,7 +28,7 @@ export default async (request: Request, response: Response, next: NextFunction) 
     if (!payload || typeof payload == "string") {
       return response.status(401).json({
         code: 401,
-        message: "Unauthorized"
+        message: "Invalid Access Token"
       });
     }
 
@@ -38,7 +38,7 @@ export default async (request: Request, response: Response, next: NextFunction) 
     if (!user) {
       return response.status(401).json({
         code: 401,
-        message: "Unauthorized"
+        message: "Invalid Access Token"
       });
     }
 
@@ -47,7 +47,7 @@ export default async (request: Request, response: Response, next: NextFunction) 
   } catch (error) {
     return response.status(401).json({
       code: 401,
-      message: "Unauthorized"
+      message: "Invalid Access Token"
     });
   }
 }
