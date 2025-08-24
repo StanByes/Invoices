@@ -1,0 +1,136 @@
+* {
+    margin: 0;
+    padding: 0;
+
+    font-family: Bahnschrift;
+}
+
+body {
+    background-color: #9797d1;
+}
+
+.login-box input {
+    border: 1px solid;
+    border-radius: 3px;
+    margin-top: 2%;
+    padding: 0.5rem;
+    grid-column-start: 1;
+    grid-column-end: 3;
+    outline: none !important;
+    transition: box-shadow 250ms;
+}
+
+input:focus {
+    box-shadow: 0 0 5px 2px #919191;
+}
+
+input.error {
+    border: 1px solid red;
+}
+
+input.error:focus {
+    box-shadow: 0 0 5px 2px rgb(255, 127, 127);
+}
+
+.invalid-input {
+    margin-top: 2px;
+    font-size: 75%;
+    color: #d10000;
+}
+
+.input-group {
+    display: grid;
+    grid-template-columns: 100%;
+}
+
+.login-box {
+    display: grid;
+    row-gap: 25px;
+    grid-template-columns: 75% 25%;
+    align-items: center;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    width: 30%;
+    background-color: white;
+    padding: 1%;
+    margin: 5% auto auto;
+}
+
+.login-box .logo {
+    width: 100%;
+}
+
+.login-box .input-group {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.login-box .button {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.button {
+    background-color: transparent;
+    border: 0;
+    border-radius: 3px;
+    font-size: 100%;
+    padding: 2%;
+}
+
+.button-validate {
+    background-color: #0096ff;
+    border: 2px solid #3cafff;
+    color: white;
+}
+
+.button-validate:hover {
+    background-color: #0077c6;
+}
+
+.alert {
+    border: 0 solid;
+    border-radius: 3px;
+    width: 75%;
+    padding: 1%;
+    position: fixed;
+    top: 1%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+
+    text-align: center;
+    font-size: 125%;
+}
+
+.alert-error {
+    background-color: rgb(255, 39, 39);
+}
+
+.fade {
+    opacity: 0;
+    animation: fadeOut 0.1s ease-out;
+}
+
+.show {
+    opacity: 1;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
